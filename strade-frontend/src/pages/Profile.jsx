@@ -54,6 +54,12 @@ export default function Profile({ onBack }) {
   const [passwordForm, setPasswordForm] = useState({ current: '', newPassword: '', confirm: '' });
   const [lastPasswordUpdate, setLastPasswordUpdate] = useState('Belum pernah diperbarui');
 
+  // Edit mode states
+  const [isEditingBasic, setIsEditingBasic] = useState(false);
+  const [isEditingAvatar, setIsEditingAvatar] = useState(false);
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [isEditingContact, setIsEditingContact] = useState(false);
+
   const initials = useMemo(() => profile.name.split(' ').map((part) => part[0]).join('').slice(0, 2), [profile.name]);
 
   const handleBasicChange = (event) => {

@@ -88,8 +88,8 @@ function App() {
       {/* Header */}
       <Header />
 
-      {/* Main Content - with top padding to account for fixed header and bottom padding for navigation */}
-      <main className="pt-[80px] pb-[100px] min-h-screen">
+      {/* Main Content - bottom padding for navigation */}
+      <main className="pb-[100px] min-h-screen">
         {renderPage()}
       </main>
 

@@ -4,12 +4,11 @@ import { Bot } from 'lucide-react';
 export default function Header() {
   return (
     <header 
-      className="fixed top-0 left-0 right-0 z-50 border-b border-[#84F7F0]/30 h-16"
+      className="relative z-10 border-b border-[#84F7F0]/20 h-16"
       style={{
-        background: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(132, 247, 240, 0.1)'
+        background: 'rgba(0, 0, 0, 0.3)',
+        backdropFilter: 'blur(5px)',
+        WebkitBackdropFilter: 'blur(5px)',
       }}
     >
       <div className="mx-auto max-w-7xl h-full flex items-center px-4 md:px-6">
