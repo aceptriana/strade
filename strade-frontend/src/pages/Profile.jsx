@@ -14,7 +14,8 @@ import {
   Edit3,
   Trash2,
   Save,
-  User as UserIcon
+  User as UserIcon,
+  LogOut
 } from 'lucide-react';
 import Card from '../components/Card';
 import SectionTitle from '../components/SectionTitle';
@@ -62,6 +63,22 @@ export default function Profile({ onBack }) {
 
   const initials = useMemo(() => profile.name.split(' ').map((part) => part[0]).join('').slice(0, 2), [profile.name]);
 
+  const handleLogout = () => {
+    if (window.confirm('Apakah Anda yakin ingin keluar dari akun?')) {
+      // Clear any stored auth data (demo purpose)
+      localStorage.removeItem('authToken');
+      sessionStorage.clear();
+      
+      // Show confirmation
+      alert('Anda telah keluar dari akun. Untuk demo, kembali ke halaman utama.');
+      
+      // Navigate back to dashboard or home
+      if (onBack) {
+        onBack();
+      }
+    }
+  };
+
   const handleBasicChange = (event) => {
     const { name, value } = event.target;
     setBasicForm((prev) => ({ ...prev, [name]: value }));
@@ -81,15 +98,18 @@ export default function Profile({ onBack }) {
         return item;
       })
     );
+    setIsEditingBasic(false);
   };
 
   const resetBasicForm = () => {
     setBasicForm(profile);
+    setIsEditingBasic(false);
   };
 
   const handleAvatarSubmit = (event) => {
     event.preventDefault();
     setProfile((prev) => ({ ...prev, avatarUrl: basicForm.avatarUrl || '' }));
+    setIsEditingAvatar(false);
   };
 
   const handleContactChange = (event) => {
@@ -164,6 +184,7 @@ export default function Profile({ onBack }) {
 
     setLastPasswordUpdate(timestamp);
     setPasswordForm({ current: '', newPassword: '', confirm: '' });
+    setIsEditingPassword(false);
   };
 
   return (
@@ -219,224 +240,338 @@ export default function Profile({ onBack }) {
   <Card className="">
         <SectionTitle
           title="Informasi Dasar"
-          subtitle="Perbarui nama, kontak utama, dan negara domisili"
+          subtitle="Nama, kontak utama, dan negara domisili"
           align="left"
           className="mb-6"
         />
-        <form onSubmit={handleBasicSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70">Nama Lengkap</label>
-              <input
-                name="name"
-                value={basicForm.name}
-                onChange={handleBasicChange}
-                className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-              />
+        
+        {!isEditingBasic ? (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="rounded-xl border border-white/10 bg-slate-800/40 px-4 py-3">
+                <p className="text-xs text-white/60 mb-1">Nama Lengkap</p>
+                <p className="text-base font-semibold text-white">{profile.name}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-slate-800/40 px-4 py-3">
+                <p className="text-xs text-white/60 mb-1">Email</p>
+                <p className="text-base font-semibold text-white">{profile.email}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-slate-800/40 px-4 py-3">
+                <p className="text-xs text-white/60 mb-1">Nomor Telepon</p>
+                <p className="text-base font-semibold text-white">{profile.phone}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-slate-800/40 px-4 py-3">
+                <p className="text-xs text-white/60 mb-1">Negara</p>
+                <p className="text-base font-semibold text-white">{profile.country}</p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={basicForm.email}
-                onChange={handleBasicChange}
-                className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70">Nomor Telepon</label>
-              <input
-                name="phone"
-                value={basicForm.phone}
-                onChange={handleBasicChange}
-                className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70">Negara</label>
-              <input
-                name="country"
-                value={basicForm.country}
-                onChange={handleBasicChange}
-                className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-              />
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button type="submit">
-              <Save className="mr-2 h-4 w-4" />
-              Simpan Profil
-            </Button>
-            <Button type="button" variant="secondary" onClick={resetBasicForm}>
-              Reset Perubahan
+            <Button onClick={() => setIsEditingBasic(true)} variant="secondary">
+              <Edit3 className="mr-2 h-4 w-4" />
+              Edit Informasi Dasar
             </Button>
           </div>
-        </form>
+        ) : (
+          <form onSubmit={handleBasicSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white/70">Nama Lengkap</label>
+                <input
+                  name="name"
+                  value={basicForm.name}
+                  onChange={handleBasicChange}
+                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white/70">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={basicForm.email}
+                  onChange={handleBasicChange}
+                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white/70">Nomor Telepon</label>
+                <input
+                  name="phone"
+                  value={basicForm.phone}
+                  onChange={handleBasicChange}
+                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white/70">Negara</label>
+                <input
+                  name="country"
+                  value={basicForm.country}
+                  onChange={handleBasicChange}
+                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                />
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button type="submit">
+                <Save className="mr-2 h-4 w-4" />
+                Simpan Profil
+              </Button>
+              <Button type="button" variant="secondary" onClick={resetBasicForm}>
+                Batal
+              </Button>
+            </div>
+          </form>
+        )}
       </Card>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
   <Card className="space-y-6">
           <SectionTitle
             title="Foto & Avatar"
-            subtitle="Gunakan URL gambar untuk mengatur foto demo"
+            subtitle="URL gambar untuk foto profil"
             align="left"
             className="mb-0"
           />
-          <div className="flex items-center gap-4">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-white/15 bg-slate-900/60">
-              {profile.avatarUrl ? (
-                <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full rounded-2xl object-cover" />
-              ) : (
-                <ImageIcon className="h-8 w-8 text-white/40" />
-              )}
-            </div>
-            <p className="text-sm text-white/60 md:text-base">
-              Untuk keperluan demo, tempel URL gambar (mis. dari CDN) untuk mengganti foto profil tanpa upload.
-            </p>
-          </div>
-          <form onSubmit={handleAvatarSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70">Avatar URL</label>
-              <input
-                name="avatarUrl"
-                value={basicForm.avatarUrl || ''}
-                onChange={handleBasicChange}
-                placeholder="https://.../avatar.png"
-                className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-              />
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button type="submit">
-                Perbarui Foto
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => setBasicForm((prev) => ({ ...prev, avatarUrl: '' }))}
-              >
-                Gunakan Inisial
+          
+          {!isEditingAvatar ? (
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-white/15 bg-slate-900/60">
+                  {profile.avatarUrl ? (
+                    <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full rounded-2xl object-cover" />
+                  ) : (
+                    <ImageIcon className="h-8 w-8 text-white/40" />
+                  )}
+                </div>
+                <div>
+                  <p className="font-semibold text-white">
+                    {profile.avatarUrl ? 'Foto Profil Aktif' : 'Menggunakan Inisial'}
+                  </p>
+                  <p className="text-sm text-white/60">
+                    {profile.avatarUrl ? 'Custom avatar URL' : 'Default avatar dengan inisial nama'}
+                  </p>
+                </div>
+              </div>
+              <Button onClick={() => setIsEditingAvatar(true)} variant="secondary">
+                <Edit3 className="mr-2 h-4 w-4" />
+                Ubah Foto
               </Button>
             </div>
-          </form>
+          ) : (
+            <form onSubmit={handleAvatarSubmit} className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-white/15 bg-slate-900/60">
+                  {profile.avatarUrl ? (
+                    <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full rounded-2xl object-cover" />
+                  ) : (
+                    <ImageIcon className="h-8 w-8 text-white/40" />
+                  )}
+                </div>
+                <p className="text-sm text-white/60">
+                  Tempel URL gambar (CDN) untuk demo tanpa upload
+                </p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white/70">Avatar URL</label>
+                <input
+                  name="avatarUrl"
+                  value={basicForm.avatarUrl || ''}
+                  onChange={handleBasicChange}
+                  placeholder="https://.../avatar.png"
+                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                />
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <Button type="submit">
+                  <Save className="mr-2 h-4 w-4" />
+                  Simpan Foto
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setBasicForm((prev) => ({ ...prev, avatarUrl: '' }));
+                    setIsEditingAvatar(false);
+                  }}
+                >
+                  Batal
+                </Button>
+              </div>
+            </form>
+          )}
         </Card>
 
   <Card className="space-y-6">
           <SectionTitle
             title="Kata Sandi"
-            subtitle="Permbarui password akun demo"
+            subtitle="Kelola password akun demo"
             align="left"
             className="mb-0"
           />
-          <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/70">Password Saat Ini</label>
-              <input
-                type="password"
-                name="current"
-                value={passwordForm.current}
-                onChange={handlePasswordChange}
-                className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-              />
+          
+          {!isEditingPassword ? (
+            <div className="space-y-4">
+              <div className="rounded-xl border border-white/10 bg-slate-800/40 px-4 py-3">
+                <p className="text-xs text-white/60 mb-1">Status Password</p>
+                <p className="text-base font-semibold text-white">•••••••••••••</p>
+                <p className="text-xs text-white/50 mt-2">Terakhir diperbarui: {lastPasswordUpdate}</p>
+              </div>
+              <Button onClick={() => setIsEditingPassword(true)} variant="secondary">
+                <Key className="mr-2 h-4 w-4" />
+                Ubah Password
+              </Button>
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          ) : (
+            <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white/70">Password Baru</label>
+                <label className="text-sm font-medium text-white/70">Password Saat Ini</label>
                 <input
                   type="password"
-                  name="newPassword"
-                  value={passwordForm.newPassword}
+                  name="current"
+                  value={passwordForm.current}
                   onChange={handlePasswordChange}
                   className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-white/70">Konfirmasi Password</label>
-                <input
-                  type="password"
-                  name="confirm"
-                  value={passwordForm.confirm}
-                  onChange={handlePasswordChange}
-                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-                />
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-white/70">Password Baru</label>
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={passwordForm.newPassword}
+                    onChange={handlePasswordChange}
+                    className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-white/70">Konfirmasi Password</label>
+                  <input
+                    type="password"
+                    name="confirm"
+                    value={passwordForm.confirm}
+                    onChange={handlePasswordChange}
+                    className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button type="submit">Perbarui Password</Button>
-              <span className="text-sm text-white/50">Terakhir diperbarui: {lastPasswordUpdate}</span>
-            </div>
-          </form>
+              <div className="flex flex-wrap items-center gap-3">
+                <Button type="submit">
+                  <Save className="mr-2 h-4 w-4" />
+                  Simpan Password
+                </Button>
+                <Button type="button" variant="secondary" onClick={() => setIsEditingPassword(false)}>
+                  Batal
+                </Button>
+              </div>
+            </form>
+          )}
         </Card>
       </div>
 
   <Card className="space-y-6">
         <SectionTitle
           title="Kontak Tambahan"
-          subtitle="Tambahkan alamat email cadangan atau kontak darurat"
+          subtitle="Alamat email cadangan atau kontak darurat"
           align="left"
           className="mb-0"
         />
-        <form onSubmit={handleContactSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-4 md:items-end">
-          <div className="space-y-2 md:col-span-1">
-            <label className="text-sm font-medium text-white/70">Tipe</label>
-            <select
-              name="type"
-              value={contactForm.type}
-              onChange={handleContactChange}
-              className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-            >
-              <option>Email</option>
-              <option>Telepon</option>
-              <option>Telegram</option>
-              <option>WhatsApp</option>
-            </select>
-          </div>
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium text-white/70">Detail Kontak</label>
-            <input
-              name="value"
-              value={contactForm.value}
-              onChange={handleContactChange}
-              placeholder="Masukkan detail kontak"
-              className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
-            />
-          </div>
-          <div className="md:col-span-1">
-            <Button type="submit" className="w-full">
-              {editingContactId ? 'Perbarui' : 'Tambahkan'}
+        
+        {!isEditingContact ? (
+          <div className="space-y-4">
+            <div className="space-y-3">
+              {contacts.length === 0 ? (
+                <p className="text-sm text-white/60">Belum ada kontak tambahan.</p>
+              ) : (
+                contacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    className="flex items-center justify-between rounded-xl border border-white/10 bg-slate-800/40 px-4 py-3"
+                  >
+                    <div>
+                      <p className="text-xs text-white/60">{contact.type}</p>
+                      <p className="font-semibold text-white">{contact.value}</p>
+                      {contact.primary && <span className="text-xs text-84F7F0">Kontak utama</span>}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            <Button onClick={() => setIsEditingContact(true)} variant="secondary">
+              <Edit3 className="mr-2 h-4 w-4" />
+              Kelola Kontak
             </Button>
           </div>
-        </form>
-        <div className="space-y-3">
-          {contacts.length === 0 ? (
-            <p className="text-sm text-white/60">Belum ada kontak tambahan.</p>
-          ) : (
-            contacts.map((contact) => (
-              <div
-                key={contact.id}
-                className="flex flex-col gap-3 rounded-xl border border-white/10 bg-slate-800/40 px-4 py-4 text-sm text-white/80 md:flex-row md:items-center md:justify-between"
-              >
-                <div className="space-y-1">
-                  <p className="font-semibold text-white">{contact.type}</p>
-                  <p>{contact.value}</p>
-                  {contact.primary && <span className="text-xs text-84F7F0">Kontak utama</span>}
-                </div>
-                {!contact.primary && (
-                  <div className="flex items-center gap-2">
-                    <Button size="sm" variant="secondary" onClick={() => handleEditContact(contact)}>
-                      <Edit3 className="mr-2 h-4 w-4" />
-                      Edit
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => handleDeleteContact(contact.id)}>
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Hapus
-                    </Button>
-                  </div>
-                )}
+        ) : (
+          <div className="space-y-4">
+            <form onSubmit={handleContactSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-4 md:items-end">
+              <div className="space-y-2 md:col-span-1">
+                <label className="text-sm font-medium text-white/70">Tipe</label>
+                <select
+                  name="type"
+                  value={contactForm.type}
+                  onChange={handleContactChange}
+                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                >
+                  <option>Email</option>
+                  <option>Telepon</option>
+                  <option>Telegram</option>
+                  <option>WhatsApp</option>
+                </select>
               </div>
-            ))
-          )}
-        </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium text-white/70">Detail Kontak</label>
+                <input
+                  name="value"
+                  value={contactForm.value}
+                  onChange={handleContactChange}
+                  placeholder="Masukkan detail kontak"
+                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-84F7F0"
+                />
+              </div>
+              <div className="md:col-span-1">
+                <Button type="submit" className="w-full">
+                  {editingContactId ? 'Update' : 'Tambah'}
+                </Button>
+              </div>
+            </form>
+            
+            <div className="space-y-3">
+              {contacts.map((contact) => (
+                <div
+                  key={contact.id}
+                  className="flex flex-col gap-3 rounded-xl border border-white/10 bg-slate-800/40 px-4 py-4 md:flex-row md:items-center md:justify-between"
+                >
+                  <div className="space-y-1">
+                    <p className="font-semibold text-white">{contact.type}</p>
+                    <p className="text-sm text-white/70">{contact.value}</p>
+                    {contact.primary && <span className="text-xs text-84F7F0">Kontak utama</span>}
+                  </div>
+                  {!contact.primary && (
+                    <div className="flex items-center gap-2">
+                      <Button size="sm" variant="secondary" onClick={() => handleEditContact(contact)}>
+                        <Edit3 className="mr-2 h-4 w-4" />
+                        Edit
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => handleDeleteContact(contact.id)}>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Hapus
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            <Button onClick={() => {
+              setIsEditingContact(false);
+              setEditingContactId(null);
+              setContactForm({ type: 'Email', value: '' });
+            }} variant="secondary">
+              Selesai
+            </Button>
+          </div>
+        )}
       </Card>
 
   <Card className="space-y-6">
@@ -537,6 +672,18 @@ export default function Profile({ onBack }) {
             </Button>
           </div>
         </Card>
+      </div>
+
+      {/* Logout Button */}
+      <div className="flex justify-center pt-4">
+        <Button 
+          variant="outline" 
+          onClick={handleLogout}
+          className="text-red-400 border-red-400/50 hover:bg-red-400/10 hover:border-red-400"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Logout
+        </Button>
       </div>
     </PageLayout>
   );

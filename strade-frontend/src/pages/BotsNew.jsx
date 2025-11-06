@@ -86,23 +86,20 @@ export default function Bots({ onNavigate }) {
     <PageLayout
       title="Expert Advisor"
       subtitle="Configure & Test Your Trading Strategy"
-      maxWidth="max-w-2xl"
+      maxWidth="max-w-4xl"
     >
-      <div className="flex justify-center">
-        <Card padding="p-6 sm:p-8 md:p-10" className="w-full max-w-xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-5 sm:space-y-6"
-          >
-            {/* Title */}
+      <div className="flex justify-center mb-20">
+        <Card padding="p-6 sm:p-8" className="w-full max-w-2xl border-[#84F7F0]/20 backdrop-blur-md">
+          <div className="space-y-6">
+            {/* Title Section */}
             <div className="text-center mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Expert Advisor</h2>
+              <h2 className="text-2xl font-bold text-[#84F7F0] mb-2">Strategy Configuration</h2>
+              <p className="text-sm text-white/70">Set up your automated trading parameters</p>
             </div>
 
             {/* Pair Selection */}
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-white/80">Pair</label>
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-white/90">Trading Pair</label>
               <CustomDropdown
                 options={pairs.map(p => ({
                   value: p.symbol,
@@ -116,157 +113,190 @@ export default function Bots({ onNavigate }) {
                 disabled={loading}
               />
               {loading && (
-                <div className="text-xs text-white/60 mt-1">Loading pairs...</div>
+                <div className="text-xs text-[#84F7F0]/60 mt-1">Loading pairs from Binance...</div>
               )}
             </div>
 
-            {/* Strategy Settings */}
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-white/80">Strategy</label>
-              <div className="grid grid-cols-2 gap-3">
-                <input
-                  type="number"
-                  value={maFast}
-                  onChange={(e) => setMaFast(e.target.value)}
-                  placeholder="10"
-                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-2.5 text-center text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]"
-                />
-                <input
-                  type="number"
-                  value={maSlow}
-                  onChange={(e) => setMaSlow(e.target.value)}
-                  placeholder="30"
-                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-2.5 text-center text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]"
-                />
+            {/* Strategy Settings - 2 Columns */}
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-white/90">Moving Average Strategy</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs text-white/60">Fast MA Period</label>
+                  <input
+                    type="number"
+                    value={maFast}
+                    onChange={(e) => setMaFast(e.target.value)}
+                    placeholder="10"
+                    className="w-full rounded-lg border border-[#84F7F0]/40 bg-[#041C1A] px-4 py-3 text-center text-sm text-[#84F7F0] placeholder-[#84F7F0]/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]/50 transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs text-white/60">Slow MA Period</label>
+                  <input
+                    type="number"
+                    value={maSlow}
+                    onChange={(e) => setMaSlow(e.target.value)}
+                    placeholder="30"
+                    className="w-full rounded-lg border border-[#84F7F0]/40 bg-[#041C1A] px-4 py-3 text-center text-sm text-[#84F7F0] placeholder-[#84F7F0]/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]/50 transition-all"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Risk & Reward */}
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-white/80">Risk & Reward</label>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={targetProfit}
-                    onChange={(e) => setTargetProfit(e.target.value)}
-                    placeholder="1.0"
-                    className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-2.5 pr-8 text-center text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]"
-                  />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/40">%</span>
+            {/* Risk & Reward - 2 Columns */}
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-white/90">Risk & Reward Parameters</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs text-white/60">Target Profit (%)</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={targetProfit}
+                      onChange={(e) => setTargetProfit(e.target.value)}
+                      placeholder="1.0"
+                      className="w-full rounded-lg border border-[#84F7F0]/40 bg-[#041C1A] px-4 py-3 pr-10 text-center text-sm text-[#84F7F0] placeholder-[#84F7F0]/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]/50 transition-all"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#84F7F0]/60">%</span>
+                  </div>
                 </div>
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={stopLoss}
-                    onChange={(e) => setStopLoss(e.target.value)}
-                    placeholder="0.5"
-                    className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-2.5 pr-8 text-center text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]"
-                  />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/40">%</span>
+                <div className="space-y-2">
+                  <label className="text-xs text-white/60">Stop Loss (%)</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={stopLoss}
+                      onChange={(e) => setStopLoss(e.target.value)}
+                      placeholder="0.5"
+                      className="w-full rounded-lg border border-[#84F7F0]/40 bg-[#041C1A] px-4 py-3 pr-10 text-center text-sm text-[#84F7F0] placeholder-[#84F7F0]/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]/50 transition-all"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#84F7F0]/60">%</span>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Capital */}
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-white/80">Capital</label>
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-white/90">Trading Capital</label>
               <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[#84F7F0]/60">$</span>
                 <input
                   type="number"
                   step="100"
                   value={capital}
                   onChange={(e) => setCapital(e.target.value)}
                   placeholder="1000"
-                  className="w-full rounded-xl border border-white/15 bg-slate-800/60 px-3 py-2.5 pr-8 text-center text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]"
+                  className="w-full rounded-lg border border-[#84F7F0]/40 bg-[#041C1A] px-4 py-3 pl-10 text-center text-sm text-[#84F7F0] placeholder-[#84F7F0]/40 focus:outline-none focus:ring-2 focus:ring-[#84F7F0]/50 transition-all"
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/40">$</span>
               </div>
             </div>
 
             {/* Testing Button */}
-            <Button
-              onClick={handleTesting}
-              disabled={isTesting}
-              className="w-full bg-gradient-to-r from-[#84F7F0] to-[#000000] hover:from-[#84F7F0] hover:to-[#000000] text-white font-semibold py-3 text-sm"
-            >
-              {isTesting ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                  className="inline-block"
-                >
-                  ⏳
-                </motion.div>
-              ) : (
-                'Testing'
-              )}
-            </Button>
+            <div className="pt-2">
+              <Button
+                onClick={handleTesting}
+                disabled={isTesting}
+                className="w-full bg-[#84F7F0] hover:bg-[#6dd9d3] text-black font-bold py-3.5 text-sm shadow-lg shadow-[#84F7F0]/30 transition-all"
+              >
+                {isTesting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      className="inline-block"
+                    >
+                      ⏳
+                    </motion.div>
+                    Testing Strategy...
+                  </span>
+                ) : (
+                  'Run Backtest'
+                )}
+              </Button>
+            </div>
 
             {/* Results */}
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-white/80 mb-3">Result</label>
-              <div className="rounded-xl border border-white/10 bg-slate-800/40 p-4 space-y-2">
-                {testResults.map((result, index) => (
-                  <motion.div
-                    key={result.label}
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: '100%', opacity: 1 }}
-                    transition={{ delay: isTesting ? 0 : index * 0.1, duration: 0.5 }}
-                    className="space-y-1"
-                  >
-                    <div className="flex justify-between text-xs text-white/60">
-                      <span>{result.label}</span>
-                      <span>{result.value}{result.label === 'Sharpe Ratio' ? '' : '%'}</span>
-                    </div>
-                    <div className="h-2.5 rounded-full bg-slate-900/60 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(parseFloat(result.value) / result.max) * 100}%` }}
-                        transition={{ delay: isTesting ? 0 : index * 0.1 + 0.2, duration: 0.8, ease: 'easeOut' }}
-                        className="h-full rounded-full bg-gradient-to-r from-[#84F7F0] via-[#84F7F0] to-[#000000]"
-                      />
-                    </div>
-                  </motion.div>
-                ))}
+            <div className="space-y-3 pt-4">
+              <label className="block text-sm font-semibold text-white/90 mb-4">Backtest Results</label>
+              <div className="rounded-xl border border-[#84F7F0]/20 bg-[#041C1A]/60 backdrop-blur-sm p-5 space-y-4">
+                {testResults.map((result, index) => {
+                  const isNegative = result.label === 'Max Drawdown';
+                  const barColor = isNegative ? '#FF4D4D' : '#00FF7F';
+                  const textColor = isNegative ? '#FF4D4D' : '#00FF7F';
+                  
+                  return (
+                    <motion.div
+                      key={result.label}
+                      initial={{ width: 0, opacity: 0 }}
+                      animate={{ width: '100%', opacity: 1 }}
+                      transition={{ delay: isTesting ? 0 : index * 0.1, duration: 0.5 }}
+                      className="space-y-2"
+                    >
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-white/80 font-medium">{result.label}</span>
+                        <span className="font-bold" style={{ color: textColor }}>
+                          {result.value}{result.label === 'Sharpe Ratio' ? '' : '%'}
+                        </span>
+                      </div>
+                      <div className="h-3 rounded-full bg-slate-900/60 overflow-hidden border border-white/5">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(parseFloat(result.value) / result.max) * 100}%` }}
+                          transition={{ delay: isTesting ? 0 : index * 0.1 + 0.2, duration: 0.8, ease: 'easeOut' }}
+                          className="h-full rounded-full"
+                          style={{ 
+                            background: `linear-gradient(to right, ${barColor}, ${barColor}dd)`,
+                            boxShadow: `0 0 8px ${barColor}40`
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
 
             {/* Activated Button */}
-            <Button
-              onClick={handleActivate}
-              className={`w-full font-semibold py-3 text-sm transition-all ${
-                isActivated
-                  ? 'bg-gradient-to-r from-[#84F7F0] to-[#000000] hover:from-[#84F7F0] hover:to-[#000000]'
-                  : 'bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600'
-              }`}
-            >
-              {isActivated ? (
-                <span className="flex items-center justify-center gap-2">
-                  <Play className="h-4 w-4" />
-                  Activated ✓
-                </span>
-              ) : (
-                'Activated'
-              )}
-            </Button>
+            <div className="pt-2">
+              <Button
+                onClick={handleActivate}
+                className={`w-full font-bold py-3.5 text-sm transition-all shadow-lg ${
+                  isActivated
+                    ? 'bg-gradient-to-r from-[#06ac3a] to-[#028f69] text-white shadow-green-500/30'
+                    : 'bg-gradient-to-r from-[#84F7F0] to-[#6dd9d3] text-black shadow-[#84F7F0]/30'
+                }`}
+              >
+                {isActivated ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <Play className="h-4 w-4" />
+                    Bot Active ✓
+                  </span>
+                ) : (
+                  'Activate Bot'
+                )}
+              </Button>
+            </div>
 
             {/* Info Text */}
             {isActivated && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center"
+                className="text-center pt-2"
               >
-                <p className="text-xs text-[#84F7F0] flex items-center justify-center gap-2">
-                  <TrendingUp className="h-3 w-3" />
-                  Bot is running on {pair} with MA{maFast}/{maSlow} • Capital: ${parseFloat(capital).toLocaleString()}
-                </p>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#06ac3a]/10 border border-[#06ac3a]/30">
+                  <TrendingUp className="h-4 w-4 text-[#06ac3a]" />
+                  <p className="text-xs text-[#06ac3a] font-semibold">
+                    Running on {pair} • MA{maFast}/{maSlow} • ${parseFloat(capital).toLocaleString()} Capital
+                  </p>
+                </div>
               </motion.div>
             )}
-          </motion.div>
+          </div>
         </Card>
       </div>
     </PageLayout>
