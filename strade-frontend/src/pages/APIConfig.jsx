@@ -275,7 +275,7 @@ export default function APIConfig({ onBack }) {
             'Masuk ke akun exchange dan buka menu API Management.',
             'Buat API key baru dan pilih izin Trading (Read/Write).',
             'Aktifkan whitelist IP bila tersedia untuk keamanan tambahan.',
-            'Salin API Key dan Secret Key ke formulir BIDBOX.'
+            'Salin API Key dan Secret Key ke formulir STRADE.'
           ].map((step, index) => (
             <div key={index} className="flex gap-4">
               <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-84F7F0/30 bg-84F7F0/20">

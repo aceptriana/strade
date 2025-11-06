@@ -24,7 +24,7 @@ import PageLayout from '../components/PageLayout';
 
 const initialProfile = {
   name: 'Alya Prananda',
-  email: 'alya.prananda@bidbox.ai',
+  email: 'alya.prananda@strade.ai',
   phone: '+62 812-3456-7890',
   country: 'Indonesia',
   memberSince: '12 Februari 2024',
@@ -190,7 +190,7 @@ export default function Profile({ onBack }) {
   return (
     <PageLayout
       title="Profil Pengguna"
-      subtitle="Kelola identitas, kontak, dan kredensial akun BIDBOX"
+      subtitle="Kelola identitas, kontak, dan kredensial akun STRADE"
       onBack={onBack}
       actions={<Button variant="secondary" size="sm" className="hidden sm:inline-flex">Unduh Laporan Profil</Button>}
       maxWidth="max-w-6xl"
@@ -638,7 +638,7 @@ export default function Profile({ onBack }) {
               </p>
             </div>
             <ul className="list-disc space-y-2 pl-5 text-xs text-white/70 md:text-sm">
-              <li>Akun hanya dapat dibuat menggunakan kode aktivasi resmi BIDBOX.</li>
+              <li>Akun hanya dapat dibuat menggunakan kode aktivasi resmi STRADE.</li>
               <li>Kode aktivasi dikirim setelah onboarding manual selesai.</li>
               <li>Login tersedia bagi pengguna terverifikasi dengan kode aktif.</li>
             </ul>
@@ -664,7 +664,7 @@ export default function Profile({ onBack }) {
               <ShieldCheck className="mt-1 h-5 w-5 text-84F7F0" />
               <div>
                 <p className="font-semibold text-white">Kontrol Akses</p>
-                <p>Tim BIDBOX memvalidasi ulang KYC sebelum mengaktifkan sesi baru.</p>
+                <p>Tim STRADE memvalidasi ulang KYC sebelum mengaktifkan sesi baru.</p>
               </div>
             </div>
             <Button variant="secondary" className="w-full">

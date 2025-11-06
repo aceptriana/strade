@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TrendingUp, Activity, Cpu, Bot, User } from 'lucide-react';
 import Header from './components/Header';
+// Import auth pages
+import Login from './pages/Login';
+import Activation from './pages/Activation';
+import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 // Import new enhanced pages
 import DashboardNew from './pages/DashboardNew';
 import TradeNew from './pages/TradeNew';
@@ -21,6 +26,87 @@ import Profile from './pages/Profile';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authView, setAuthView] = useState('login'); // 'login', 'activation', 'register', 'forgot'
+
+  // Check authentication on mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+
+    // Listen for storage changes (logout from Profile page)
+    const handleStorageChange = () => {
+      const token = localStorage.getItem('authToken');
+      if (!token && isAuthenticated) {
+        setIsAuthenticated(false);
+        setAuthView('login');
+      }
+    };
+
+    // Check storage every 500ms (for same-tab detection)
+    const interval = setInterval(() => {
+      const token = localStorage.getItem('authToken');
+      if (!token && isAuthenticated) {
+        setIsAuthenticated(false);
+        setAuthView('login');
+      }
+    }, 500);
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [isAuthenticated]);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    setCurrentPage('dashboard');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userData');
+    setIsAuthenticated(false);
+    setAuthView('login');
+  };
+
+  const handleActivationSuccess = () => {
+    setAuthView('register');
+  };
+
+  const handleRegisterSuccess = () => {
+    setIsAuthenticated(true);
+    setCurrentPage('dashboard');
+  };
+
+  // If not authenticated, show auth pages
+  if (!isAuthenticated) {
+    switch (authView) {
+      case 'activation':
+        return (
+          <Activation 
+            onNavigate={setAuthView}
+            onActivationSuccess={handleActivationSuccess}
+          />
+        );
+      case 'register':
+        return (
+          <Register 
+            onNavigate={setAuthView}
+            onRegisterSuccess={handleRegisterSuccess}
+          />
+        );
+      case 'forgot':
+        return <ForgotPassword onNavigate={setAuthView} />;
+      default:
+        return <Login onLogin={handleLogin} onNavigate={setAuthView} />;
+    }
+  }
 
   const renderPage = () => {
     // Use new enhanced pages by default

@@ -96,7 +96,7 @@ export default function MoonbotSetting({ onBack, onNavigate }) {
           <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
             <p className="text-xs uppercase tracking-[0.2em] text-white/40">Strategi Siap Pakai</p>
             <p className="mt-2 text-2xl font-semibold text-white">{botList.length}</p>
-            <p className="text-xs text-white/50">Dikurasi dan dikelola tim BIDBOX</p>
+            <p className="text-xs text-white/50">Dikurasi dan dikelola tim STRADE</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
             <p className="text-xs uppercase tracking-[0.2em] text-white/40">Integrasi API</p>
@@ -214,7 +214,7 @@ export default function MoonbotSetting({ onBack, onNavigate }) {
   <Card className="space-y-5">
         <SectionTitle
           title="Proteksi & Monitoring"
-          subtitle="Semua bot dimonitor live 24/7 oleh tim BIDBOX"
+          subtitle="Semua bot dimonitor live 24/7 oleh tim STRADE"
           align="left"
           className="mb-0"
         />

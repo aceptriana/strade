@@ -12,14 +12,15 @@ export default function PageLayout({
   headerContent,
   children,
   maxWidth = 'max-w-7xl',
-  contentClassName = ''
+  contentClassName = '',
+  centerHeader = false
 }) {
   return (
     <div className="min-h-screen">
       <div className={`${maxWidth} mx-auto px-4 sm:px-6 md:px-8 py-6`}>
         {(title || onBack || actions || headerContent) && (
           <div className="mb-6 sm:mb-8 md:mb-10">
-            <div className="flex items-center gap-5">
+            <div className={`flex items-center gap-5 ${centerHeader ? 'justify-center' : ''}`}>
               {onBack && (
                 <button
                   onClick={onBack}
@@ -29,7 +30,7 @@ export default function PageLayout({
                   <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
                 </button>
               )}
-              <div className="min-w-0 flex-1">
+              <div className={`min-w-0 flex-1 ${centerHeader ? 'text-center' : ''}`}>
                 {title && (
                   <h1 className="truncate text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-white">{title}</h1>
                 )}

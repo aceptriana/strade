@@ -11,8 +11,8 @@ export default function FAQ({ onBack }) {
   const faqs = [
     {
       id: 1,
-      question: 'What is BIDBOX?',
-      answer: 'BIDBOX is a modern trading bot dashboard that helps you manage your automated trading strategies with ease.'
+      question: 'What is STRADE?',
+      answer: 'STRADE is a modern trading bot dashboard that helps you manage your automated trading strategies with ease.'
     },
     {
       id: 2,
@@ -32,7 +32,7 @@ export default function FAQ({ onBack }) {
     {
       id: 5,
       question: 'Can I use multiple exchanges?',
-      answer: 'Yes, BIDBOX supports multiple exchanges including Binance, Kucoin, and more.'
+      answer: 'Yes, STRADE supports multiple exchanges including Binance, Kucoin, and more.'
     },
     {
       id: 6,

@@ -17,7 +17,7 @@ export default function Cashback({ onBack }) {
   const [campaigns, setCampaigns] = useState(defaultCampaigns);
   const [formState, setFormState] = useState({ name: '', rate: '', description: '' });
   const [editingId, setEditingId] = useState(null);
-  const [referralCode, setReferralCode] = useState('BIDBOX-INVITE-2025');
+  const [referralCode, setReferralCode] = useState('STRADE-INVITE-2025');
 
   const totalReward = useMemo(
     () => campaigns.reduce((sum, item) => sum + Number(item.reward || 0), 0),

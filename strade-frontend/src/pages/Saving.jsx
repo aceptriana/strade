@@ -161,7 +161,7 @@ export default function Saving({ onBack }) {
             <PiggyBank className="h-6 w-6 text-84F7F0" />
           </div>
           <SectionTitle
-            title="Produk Tabungan BIDBOX"
+            title="Produk Tabungan STRADE"
             subtitle="Demo APY, minimum deposit, dan periode penguncian"
             align="left"
             className="mb-0"

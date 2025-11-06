@@ -5,7 +5,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const mockUser = {
   id: 'user_001',
   name: 'Wade Warren',
-  email: 'wade.warren@bidbox.io',
+  email: 'wade.warren@strade.io',
   role: 'Trader',
   avatar: 'https://i.pravatar.cc/150?img=12',
   kycStatus: 'verified',

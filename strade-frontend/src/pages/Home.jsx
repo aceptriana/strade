@@ -21,7 +21,7 @@ export default function Home({ onNavigate, onBack }) {
 
   return (
     <PageLayout
-      title="BIDBOX"
+      title="STRADE"
       subtitle="Minimal control center untuk automasi trading kamu"
       onBack={onBack}
     >

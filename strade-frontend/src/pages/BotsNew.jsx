@@ -87,6 +87,7 @@ export default function Bots({ onNavigate }) {
       title="Expert Advisor"
       subtitle="Configure & Test Your Trading Strategy"
       maxWidth="max-w-4xl"
+      centerHeader={true}
     >
       <div className="flex justify-center mb-20">
         <Card padding="p-6 sm:p-8" className="w-full max-w-2xl border-[#84F7F0]/20 backdrop-blur-md">
